@@ -2332,3 +2332,398 @@ nav *,
     font-size: clamp(46px, 16vw, 66px) !important;
   }
 }
+
+
+/* MOBILE COMPACT + CLEAN LAYOUT */
+@media (max-width: 700px) {
+  body {
+    background-image: url('images/bg-mobile.png') !important;
+    background-size: cover !important;
+    background-position: center top !important;
+    background-attachment: scroll !important;
+  }
+
+  .navbar {
+    gap: 12px !important;
+    padding: 14px 16px 18px !important;
+  }
+
+  .logo {
+    font-size: 20px !important;
+    gap: 10px !important;
+    line-height: 0.9 !important;
+  }
+
+  .logo-icon-img {
+    width: 46px !important;
+    height: 46px !important;
+  }
+
+  nav {
+    gap: 8px 14px !important;
+    max-width: 360px !important;
+  }
+
+  nav a {
+    font-size: 12px !important;
+    padding-bottom: 5px !important;
+  }
+
+  .contact-btn {
+    padding: 10px 22px !important;
+    font-size: 13px !important;
+  }
+
+  .hero {
+    padding: 20px 18px 38px !important;
+    gap: 18px !important;
+  }
+
+  .hero h1,
+  .list-hero h1,
+  .usernames-hero h1,
+  .special-hero h1,
+  .languages-hero h1,
+  .thanks-hero h1,
+  .contact-hero h1 {
+    font-size: clamp(40px, 13vw, 58px) !important;
+    line-height: 0.92 !important;
+    letter-spacing: -1.5px !important;
+    margin-bottom: 14px !important;
+  }
+
+  .SSO-logo-img {
+    width: min(76vw, 340px) !important;
+  }
+
+  .about-section {
+    padding: 28px 18px 36px !important;
+  }
+
+  .about-section h2,
+  .contributors-section h2,
+  .thanks-section h2 {
+    font-size: clamp(32px, 10vw, 46px) !important;
+    margin-bottom: 16px !important;
+  }
+
+  .about-header {
+    margin-bottom: 22px !important;
+  }
+
+  .about-header p,
+  .special-hero p,
+  .languages-hero p,
+  .thanks-hero p,
+  .contact-hero p {
+    font-size: 15px !important;
+    line-height: 1.45 !important;
+  }
+
+  .team-grid {
+    gap: 30px !important;
+    margin-top: 22px !important;
+  }
+
+  .team-member img {
+    width: min(62vw, 210px) !important;
+    height: min(62vw, 210px) !important;
+  }
+
+  .team-member h3 {
+    font-size: 20px !important;
+    margin-top: 12px !important;
+  }
+
+  .team-member p {
+    font-size: 14px !important;
+    line-height: 1.45 !important;
+  }
+
+  .contributors-section {
+    margin-top: 52px !important;
+  }
+
+  .see-more-wrapper {
+    margin-top: 22px !important;
+  }
+
+  .see-more-btn {
+    padding: 11px 24px !important;
+    font-size: 13px !important;
+  }
+
+  .cards {
+    gap: 12px !important;
+    padding: 0 18px 42px !important;
+  }
+
+  .card {
+    min-height: 96px !important;
+    padding: 18px !important;
+    border-radius: 16px !important;
+  }
+
+  .card-icon {
+    font-size: 28px !important;
+    margin-bottom: 8px !important;
+  }
+
+  .card h3 {
+    font-size: 15px !important;
+  }
+
+  .card p {
+    font-size: 13px !important;
+  }
+
+  .list-page,
+  .usernames-page,
+  .special-page,
+  .languages-page,
+  .thanks-page,
+  .contact-page {
+    padding: 18px 16px 52px !important;
+  }
+
+  .list-hero,
+  .usernames-hero,
+  .special-hero,
+  .languages-hero,
+  .thanks-hero,
+  .contact-hero {
+    margin-bottom: 22px !important;
+  }
+
+  .language-tabs,
+  .language-mode-tabs,
+  .filter-buttons,
+  .special-nav {
+    gap: 8px !important;
+    margin-top: 14px !important;
+  }
+
+  .lang-tab,
+  .filter-btn,
+  .special-nav a {
+    font-size: 11px !important;
+    padding: 9px 13px !important;
+    border-width: 1.5px !important;
+  }
+
+  #searchInput,
+  #gallerySearch,
+  #languageSearch {
+    font-size: 14px !important;
+    padding: 13px 16px !important;
+  }
+
+  .list-tools,
+  .gallery-tools,
+  .language-tools {
+    margin-bottom: 20px !important;
+  }
+
+  .list-mini-stats {
+    gap: 8px !important;
+    margin-top: 14px !important;
+  }
+
+  .mini-stat {
+    min-width: 82px !important;
+    padding: 8px 12px !important;
+    font-size: 12px !important;
+  }
+
+  .mini-stat strong {
+    font-size: 16px !important;
+  }
+
+  .alphabet-nav {
+    margin-bottom: 24px !important;
+    padding: 8px !important;
+    gap: 5px !important;
+    border-radius: 15px !important;
+  }
+
+  .alphabet-nav a {
+    min-width: 26px !important;
+    font-size: 11px !important;
+    padding: 6px !important;
+  }
+
+  .letter-section {
+    margin-bottom: 34px !important;
+  }
+
+  .letter-section h2 {
+    font-size: 38px !important;
+    margin-bottom: 14px !important;
+  }
+
+  .username-grid {
+    gap: 12px !important;
+  }
+
+  .username-card {
+    min-height: 78px !important;
+    padding: 16px 17px !important;
+    border-radius: 18px !important;
+  }
+
+  .username-card h3 {
+    font-size: 18px !important;
+  }
+
+  .status {
+    min-width: 76px !important;
+    font-size: 11px !important;
+    padding: 6px 8px !important;
+  }
+
+  .username-gallery,
+  .username-gallery.active-gallery {
+    gap: 14px !important;
+  }
+
+  .photo-card {
+    border-radius: 18px !important;
+  }
+
+  .photo-card img {
+    max-height: 300px !important;
+  }
+
+  .photo-card h3 {
+    font-size: 20px !important;
+  }
+
+  .special-entry {
+    padding: 20px 16px !important;
+    border-radius: 20px !important;
+    margin-bottom: 30px !important;
+  }
+
+  .special-top h2 {
+    font-size: clamp(28px, 9vw, 42px) !important;
+  }
+
+  .special-top p {
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+  }
+
+  .special-links {
+    margin-top: 18px !important;
+  }
+
+  .special-link-btn {
+    padding: 11px 18px !important;
+    font-size: 12px !important;
+  }
+
+  .thanks-section {
+    margin-bottom: 60px !important;
+  }
+
+  .thanks-grid {
+    gap: 12px !important;
+  }
+
+  .thanks-card {
+    min-height: 78px !important;
+    padding: 18px !important;
+    border-radius: 18px !important;
+  }
+
+  .thanks-card h3 {
+    font-size: 20px !important;
+  }
+
+  .contact-layout {
+    gap: 18px !important;
+  }
+
+  .contact-form,
+  .contact-info {
+    padding: 18px !important;
+    border-radius: 20px !important;
+  }
+
+  .form-row label {
+    font-size: 13px !important;
+  }
+
+  .contact-form input,
+  .contact-form select,
+  .contact-form textarea {
+    font-size: 14px !important;
+    padding: 12px 14px !important;
+  }
+
+  .upload-box {
+    padding: 18px !important;
+  }
+
+  .submit-btn {
+    padding: 13px 20px !important;
+    font-size: 14px !important;
+  }
+
+  .username-modal-content {
+    width: calc(100% - 28px) !important;
+    padding: 28px 20px !important;
+    border-radius: 22px !important;
+  }
+
+  .username-modal-content h2 {
+    font-size: clamp(30px, 10vw, 44px) !important;
+  }
+
+  footer {
+    padding: 20px 18px !important;
+    font-size: 12px !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .navbar {
+    padding-top: 12px !important;
+  }
+
+  nav {
+    gap: 7px 11px !important;
+  }
+
+  nav a {
+    font-size: 11px !important;
+  }
+
+  .logo {
+    font-size: 19px !important;
+  }
+
+  .logo-icon-img {
+    width: 42px !important;
+    height: 42px !important;
+  }
+
+  .contact-btn {
+    font-size: 12px !important;
+    padding: 9px 20px !important;
+  }
+
+  .hero h1,
+  .list-hero h1,
+  .usernames-hero h1,
+  .special-hero h1,
+  .languages-hero h1,
+  .thanks-hero h1,
+  .contact-hero h1 {
+    font-size: clamp(38px, 12vw, 52px) !important;
+  }
+
+  .SSO-logo-img {
+    width: min(72vw, 300px) !important;
+  }
+}
