@@ -2729,20 +2729,48 @@ nav *,
 }
 
 
-/* MOBILE BACKGROUND FIX */
+
+
+/* MOBILE BACKGROUND HARD FIX */
 @media (max-width: 700px) {
   html,
   body {
-    background-image: url('images/bg-mobile.png') !important;
-    background-size: 100% auto !important;
-    background-position: top center !important;
-    background-repeat: repeat-y !important;
+    background: #4b1b82 !important;
+    background-image: none !important;
     background-attachment: scroll !important;
+  }
+
+  body::before {
+    content: "" !important;
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: -1 !important;
+    pointer-events: none !important;
+
+    background-image: url("images/bg-mobile.png") !important;
+    background-repeat: repeat-y !important;
+    background-size: 100vw auto !important;
+    background-position: top center !important;
     background-color: #4b1b82 !important;
   }
 
-  body::before,
   body::after {
-    background-image: none !important;
+    content: none !important;
+    display: none !important;
+  }
+
+  .navbar,
+  .hero,
+  .about-section,
+  .cards,
+  .list-page,
+  .usernames-page,
+  .special-page,
+  .languages-page,
+  .thanks-page,
+  .contact-page,
+  footer {
+    position: relative !important;
+    z-index: 1 !important;
   }
 }
