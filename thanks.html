@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Special Thanks | Deleted Usernames</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header class="navbar">
+  <a href="index.html" class="logo">
+    <img src="images/SSOicon.png" alt="Logo Icon" class="logo-icon-img">
+    <span>Deleted<br>Usernames</span>
+  </a>
+
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="list.html">List</a>
+    <a href="usernames.html">Archive&nbsp;</a>
+    <a href="special-usernames.html">Special Usernames</a>
+    <a href="languages.html">Other Languages</a>
+    <a class="active" href="thanks.html">Special Thanks</a>
+  </nav>
+
+  <a class="contact-btn" href="contact.html">Contact Us</a>
+</header>
+
+<main class="thanks-page">
+
+  <section class="thanks-hero fade-in">
+    <h1>Special<br><span>Thanks</span></h1>
+</section>
+
+  
+<section class="thanks-section fade-in">
+  <h2>Website Helper</h2>
+  <div class="thanks-grid" id="websiteThanksGrid"></div>
+</section>
+
+<section class="thanks-section fade-in">
+  <h2>Information Contributors</h2>
+  <div class="thanks-grid" id="infoThanksGrid"></div>
+</section>
+
+<section class="thanks-section fade-in">
+  <h2>Archive Contributors</h2>
+  <div class="thanks-grid" id="archiveThanksGrid"></div>
+</section>
+
+<script src="data.js"></script>
+<script>
+function renderThanksGrid(container, rows) {
+  container.replaceChildren();
+
+  if (!rows.length) {
+    container.innerHTML = `<p class="language-empty">No contributors yet.</p>`;
+    return;
+  }
+
+  rows.forEach(row => container.append(buildThanksCard(row)));
+}
+
+async function initThanksPage() {
+  const websiteGrid = document.getElementById("websiteThanksGrid");
+  const infoGrid = document.getElementById("infoThanksGrid");
+  const archiveGrid = document.getElementById("archiveThanksGrid");
+
+  setLoading(websiteGrid);
+  setLoading(infoGrid);
+  setLoading(archiveGrid);
+
+  try {
+    const rows = prepareThanksRows(await loadSheet(SHEET_NAMES.thanks));
+
+    renderThanksGrid(websiteGrid, rows.filter(row => row.category === "website"));
+    renderThanksGrid(infoGrid, rows.filter(row => row.category === "info"));
+    renderThanksGrid(archiveGrid, rows.filter(row => row.category === "archive"));
+  } catch (error) {
+    console.error(error);
+    setError(websiteGrid);
+    setError(infoGrid);
+    setError(archiveGrid);
+  }
+}
+
+window.addEventListener("DOMContentLoaded", initThanksPage);
+</script>
+
+</main>
+
+<footer>
+  <p>© 2026 Deleted Usernames | Fan-made, not affiliated with StarStableEntertainment AB.</p>
+  <p>No responsibility is taken for the accuracy or reliability of the information.&nbsp;</p>
+</footer>
+
+</body>
+</html>

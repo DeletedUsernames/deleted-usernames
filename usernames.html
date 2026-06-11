@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Usernames | Deleted Usernames</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header class="navbar">
+    <a href="index.html" class="logo">
+      <img src="images/SSOicon.png" alt="Logo Icon" class="logo-icon-img">
+      <span>Deleted<br>Usernames</span>
+    </a>
+
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="list.html">List</a>
+      <a class="active" href="usernames.html">Archive</a>
+      <a href="special-usernames.html">Special Usernames</a>
+      <a href="languages.html">Other Languages</a>
+      <a href="thanks.html">Special Thanks</a>
+    </nav>
+
+    <a class="contact-btn" href="contact.html">Contact Us</a>
+  </header>
+
+  <main class="usernames-page">
+
+    <section class="usernames-hero fade-in">
+      <h1>Found<br><span>names</span></h1>
+      <p>
+        A visual archive of removed names that have been found in game
+      </p>
+    </section>
+
+    <section class="language-tabs fade-in">
+      <button class="lang-tab active" onclick="showGallery('original', this)">Original List</button>
+      <button class="lang-tab" onclick="showGallery('turkish', this)">Turkish Names</button>
+      <button class="lang-tab" onclick="showGallery('spanish', this)">Spanish Names</button>
+    </section>
+
+    <section class="gallery-tools fade-in" id="galleryTools">
+      <input type="text" id="gallerySearch" placeholder="Search a username..." onkeyup="searchGallery()">
+    </section>
+
+    
+<section class="username-gallery active-gallery fade-in" id="original-gallery"></section>
+<section class="username-gallery fade-in" id="turkish-gallery"></section>
+<section class="username-gallery coming-soon-gallery fade-in" id="spanish-gallery">
+  <div class="coming-soon-text">Coming soon... Come back later!</div>
+</section>
+</main>
+
+<script src="data.js"></script>
+<script>
+let archiveRows = [];
+let activeGalleryKey = "original";
+
+function archiveRowsForCategory(key) {
+  return archiveRows.filter(row => row.category === key && row.status === "found" && row.image);
+}
+
+function renderArchiveGallery(container, rows) {
+  container.replaceChildren();
+
+  if (!rows.length) {
+    container.innerHTML = `<p class="language-empty">No archived images yet.</p>`;
+    return;
+  }
+
+  rows.forEach(row => container.append(buildPhotoCard(row)));
+}
+
+function showGallery(name, button) {
+  activeGalleryKey = name;
+
+  document.querySelectorAll(".username-gallery").forEach(gallery => {
+    const isActive = gallery.id === `${name}-gallery`;
+    gallery.classList.toggle("active-gallery", isActive);
+    gallery.hidden = !isActive;
+    gallery.style.display = isActive ? "" : "none";
+  });
+
+  document.querySelectorAll(".language-tabs .lang-tab").forEach(tab => {
+    tab.classList.toggle("active", tab === button);
+  });
+
+  const search = document.getElementById("gallerySearch");
+  if (search) search.value = "";
+
+  document.getElementById("galleryTools").hidden = name === "spanish";
+  searchGallery();
+}
+
+function searchGallery() {
+  const query = normalizeText(document.getElementById("gallerySearch")?.value || "");
+  const gallery = document.querySelector(".username-gallery.active-gallery");
+  if (!gallery) return;
+
+  gallery.querySelectorAll(".photo-card").forEach(card => {
+    const name = normalizeText(card.querySelector("h3")?.textContent || "");
+    card.hidden = !name.includes(query);
+  });
+}
+
+async function initArchivePage() {
+  const original = document.getElementById("original-gallery");
+  const turkish = document.getElementById("turkish-gallery");
+
+  setLoading(original);
+  setLoading(turkish);
+
+  try {
+    archiveRows = prepareMainRows(await loadSheet(SHEET_NAMES.main));
+
+    renderArchiveGallery(original, archiveRowsForCategory("original"));
+    renderArchiveGallery(turkish, archiveRowsForCategory("turkish"));
+
+    const searchInput = document.getElementById("gallerySearch");
+    if (searchInput) {
+      searchInput.addEventListener("input", searchGallery);
+      searchInput.addEventListener("search", searchGallery);
+    }
+
+    showGallery("original", document.querySelector(".language-tabs .lang-tab.active"));
+  } catch (error) {
+    console.error(error);
+    setError(original);
+    setError(turkish);
+  }
+}
+
+window.addEventListener("DOMContentLoaded", initArchivePage);
+</script>
+<footer>
+    <p>© 2026 Deleted Usernames | Fan-made, not affiliated with StarStableEntertainment AB.</p>
+    <p>No responsibility is taken for the accuracy or reliability of the information.&nbsp;</p>
+  </footer>
+
+<script>
+function showGallery(name, button) {
+  document.querySelectorAll(".username-gallery").forEach(gallery => {
+    gallery.classList.toggle("active-gallery", gallery.id === `${name}-gallery`);
+  });
+
+  document.querySelectorAll(".language-tabs .lang-tab").forEach(tab => {
+    tab.classList.toggle("active", tab === button);
+  });
+
+  const search = document.getElementById("gallerySearch");
+  if (search) search.value = "";
+
+  document.getElementById("galleryTools").hidden = name === "spanish";
+  searchGallery();
+}
+
+function searchGallery() {
+  const query = (document.getElementById("gallerySearch")?.value || "").trim().toLowerCase();
+  const gallery = document.querySelector(".username-gallery.active-gallery");
+  if (!gallery) return;
+
+  gallery.querySelectorAll(".photo-card").forEach(card => {
+    const name = card.querySelector("h3")?.textContent.toLowerCase() || "";
+    card.hidden = !name.includes(query);
+  });
+}
+</script>
+
+</body>
+</html>

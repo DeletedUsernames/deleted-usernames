@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Other Languages | Deleted Usernames</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header class="navbar">
+  <a href="index.html" class="logo">
+    <img src="images/SSOicon.png" alt="Logo Icon" class="logo-icon-img">
+    <span>Deleted<br>Usernames</span>
+  </a>
+
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="list.html">List</a>
+    <a href="usernames.html">Archive</a>
+    <a href="special-usernames.html">Special Usernames</a>
+    <a class="active" href="languages.html">Other Languages</a>
+    <a href="thanks.html">Special Thanks</a>
+  </nav>
+
+  <a class="contact-btn" href="contact.html">Contact Us</a>
+</header>
+
+<main class="languages-page">
+  <section class="languages-hero fade-in">
+    <h1>Other<br><span>Languages</span></h1>
+    <p>These usernames are still available, but only in other languages. This page keeps track of their status and archived screenshots.</p>
+  </section>
+
+  <section class="language-mode-tabs fade-in">
+    <button class="lang-tab active" onclick="setMode('list', this)">List</button>
+    <button class="lang-tab" onclick="setMode('archive', this)">Archives</button>
+  </section>
+
+  <section class="language-tabs fade-in">
+    <button class="lang-tab active" onclick="showLanguage('french', this)">French</button>
+    <button class="lang-tab" onclick="showLanguage('italian', this)">Italian</button>
+    <button class="lang-tab" onclick="showLanguage('portuguese', this)">Portuguese</button>
+  </section>
+
+  <section class="language-tools fade-in" id="languageTools">
+    <input type="text" id="languageSearch" placeholder="Search a username..." onkeyup="updateLanguageList()">
+
+    <div class="list-mini-stats">
+      <div class="mini-stat"><strong id="language-total-count">1</strong><span>Total</span></div>
+      <div class="mini-stat"><strong id="language-found-count">1</strong><span>Found</span></div>
+    </div>
+
+    <div class="filter-buttons">
+      <button class="filter-btn active" onclick="setLanguageFilter('all', this)">All</button>
+      <button class="filter-btn" onclick="setLanguageFilter('found', this)">Found</button>
+      <button class="filter-btn" onclick="setLanguageFilter('not-found', this)">Not Found</button>
+    </div>
+  </section>
+
+  
+<section class="language-list active-language-list" id="french-list"></section>
+<section class="language-list" id="italian-list"></section>
+<section class="language-list" id="portuguese-list"></section>
+
+<section class="language-archive" id="french-archive"></section>
+<section class="language-archive" id="italian-archive"></section>
+<section class="language-archive" id="portuguese-archive"></section>
+</main>
+
+<script src="data.js"></script>
+<script>
+let shownLanguage = "french";
+let shownPanel = "list";
+let languageFilter = "all";
+let languageRows = [];
+
+function languageRowsFor(language) {
+  return languageRows.filter(row => row.language === language);
+}
+
+function languageArchiveRowsFor(language) {
+  return languageRowsFor(language).filter(row => row.status === "found" && row.image);
+}
+
+function updateLanguageNumbers() {
+  const rows = languageRowsFor(shownLanguage);
+  const found = rows.filter(row => row.status === "found").length;
+
+  document.getElementById("language-total-count").textContent = rows.length;
+  document.getElementById("language-found-count").textContent = found;
+}
+
+function renderLanguageList(container, rows, idPrefix) {
+  renderGroupedList(container, rows, idPrefix);
+}
+
+function renderLanguageArchive(container, rows) {
+  container.replaceChildren();
+
+  const gallery = document.createElement("div");
+  gallery.className = "username-gallery active-gallery";
+
+  if (!rows.length) {
+    container.innerHTML = `<p class="language-empty">No archived images yet.</p>`;
+    return;
+  }
+
+  rows.forEach(row => {
+    const card = document.createElement("article");
+    card.className = "photo-card";
+
+    card.innerHTML = `
+      <img src="${escapeHtml(row.image)}" alt="${escapeHtml(row.name)}" loading="lazy">
+      <h3>${escapeHtml(row.name)}</h3>
+    `;
+
+    gallery.append(card);
+  });
+
+  container.append(gallery);
+}
+
+function setMode(mode, button) {
+  shownPanel = mode;
+  document.querySelectorAll(".language-mode-tabs .lang-tab").forEach(tab => {
+    tab.classList.toggle("active", tab === button);
+  });
+  refreshLanguagePage();
+}
+
+function showLanguage(language, button) {
+  shownLanguage = language;
+  document.querySelectorAll(".language-tabs .lang-tab").forEach(tab => {
+    tab.classList.toggle("active", tab === button);
+  });
+
+  document.getElementById("languageSearch").value = "";
+  languageFilter = "all";
+  document.querySelectorAll(".filter-btn").forEach((btn, index) => {
+    btn.classList.toggle("active", index === 0);
+  });
+
+  refreshLanguagePage();
+}
+
+function setLanguageFilter(status, button) {
+  languageFilter = status;
+  document.querySelectorAll(".filter-btn").forEach(btn => {
+    btn.classList.toggle("active", btn === button);
+  });
+  updateLanguageList();
+}
+
+function refreshLanguagePage() {
+  document.querySelectorAll(".language-list").forEach(list => {
+    const isActive = list.id === `${shownLanguage}-list` && shownPanel === "list";
+    list.classList.toggle("active-language-list", isActive);
+    list.hidden = !isActive;
+    list.style.display = isActive ? "" : "none";
+  });
+
+  document.querySelectorAll(".language-archive").forEach(archive => {
+    const isActive = archive.id === `${shownLanguage}-archive` && shownPanel === "archive";
+    archive.classList.toggle("active-language-archive", isActive);
+    archive.hidden = !isActive;
+    archive.style.display = isActive ? "" : "none";
+  });
+
+  document.getElementById("languageTools").hidden = shownPanel !== "list";
+  updateLanguageNumbers();
+  updateLanguageList();
+}
+
+function updateLanguageList() {
+  const search = normalizeText(document.getElementById("languageSearch")?.value || "");
+  const list = document.querySelector(".language-list.active-language-list");
+  if (!list) return;
+
+  list.querySelectorAll(".username-card").forEach(card => {
+    const name = normalizeText(card.querySelector("h3")?.textContent || "");
+    const status = card.dataset.status || "";
+    card.hidden = !(name.includes(search) && (languageFilter === "all" || status === languageFilter));
+  });
+
+  list.querySelectorAll(".letter-section").forEach(section => {
+    section.hidden = !Array.from(section.querySelectorAll(".username-card")).some(card => !card.hidden);
+  });
+}
+
+function openLanguageSourceCard(card) {
+  document.getElementById("languageModalUsername").textContent = card.querySelector("h3")?.textContent || "Username";
+  document.getElementById("languageModalSource").innerHTML = card.dataset.source || "Unknown";
+  document.getElementById("languageUsernameModal").classList.add("active");
+  document.body.style.overflow = "hidden";
+}
+
+function hideLanguageSourceCard() {
+  document.getElementById("languageUsernameModal").classList.remove("active");
+  document.body.style.overflow = "";
+}
+
+function bindLanguageSourceCards() {
+  document.querySelectorAll(".language-list .username-card").forEach(card => {
+    card.addEventListener("click", () => openLanguageSourceCard(card));
+  });
+
+  document.getElementById("closeLanguageModalBtn").addEventListener("click", hideLanguageSourceCard);
+  document.getElementById("languageUsernameModal").addEventListener("click", event => {
+    if (event.target === document.getElementById("languageUsernameModal")) hideLanguageSourceCard();
+  });
+
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape") hideLanguageSourceCard();
+  });
+}
+
+async function initLanguagesPage() {
+  const lists = ["french", "italian", "portuguese"];
+
+  lists.forEach(language => {
+    setLoading(document.getElementById(`${language}-list`));
+    setLoading(document.getElementById(`${language}-archive`));
+  });
+
+  try {
+    languageRows = prepareLanguageRows(await loadSheet(SHEET_NAMES.languages));
+
+    lists.forEach(language => {
+      renderLanguageList(
+        document.getElementById(`${language}-list`),
+        languageRowsFor(language),
+        `${language}-letter`
+      );
+
+      renderLanguageArchive(
+        document.getElementById(`${language}-archive`),
+        languageArchiveRowsFor(language)
+      );
+    });
+
+    bindLanguageSourceCards();
+
+    const searchInput = document.getElementById("languageSearch");
+    if (searchInput) {
+      searchInput.addEventListener("input", updateLanguageList);
+      searchInput.addEventListener("search", updateLanguageList);
+    }
+
+    refreshLanguagePage();
+  } catch (error) {
+    console.error(error);
+
+    lists.forEach(language => {
+      setError(document.getElementById(`${language}-list`));
+      setError(document.getElementById(`${language}-archive`));
+    });
+  }
+}
+
+window.addEventListener("DOMContentLoaded", initLanguagesPage);
+</script>
+<footer>
+  <p>© 2026 Deleted Usernames | Fan-made, not affiliated with StarStableEntertainment AB.</p>
+  <p>No responsibility is taken for the accuracy or reliability of the information.&nbsp;</p>
+</footer>
+
+<script>
+let shownLanguage = "french";
+let shownPanel = "list";
+let languageFilter = "all";
+
+const languageCounts = {
+  french: { total: 1, found: 1 },
+  italian: { total: 47, found: 16 },
+  portuguese: { total: 1, found: 1 }
+};
+
+function updateLanguageNumbers() {
+  const count = languageCounts[shownLanguage];
+  document.getElementById("language-total-count").textContent = count.total;
+  document.getElementById("language-found-count").textContent = count.found;
+}
+
+function setMode(mode, button) {
+  shownPanel = mode;
+  document.querySelectorAll(".language-mode-tabs .lang-tab").forEach(tab => {
+    tab.classList.toggle("active", tab === button);
+  });
+  refreshLanguagePage();
+}
+
+function showLanguage(language, button) {
+  shownLanguage = language;
+  document.querySelectorAll(".language-tabs .lang-tab").forEach(tab => {
+    tab.classList.toggle("active", tab === button);
+  });
+
+  document.getElementById("languageSearch").value = "";
+  languageFilter = "all";
+  document.querySelectorAll(".filter-btn").forEach((btn, index) => {
+    btn.classList.toggle("active", index === 0);
+  });
+
+  refreshLanguagePage();
+}
+
+function setLanguageFilter(status, button) {
+  languageFilter = status;
+  document.querySelectorAll(".filter-btn").forEach(btn => {
+    btn.classList.toggle("active", btn === button);
+  });
+  updateLanguageList();
+}
+
+function refreshLanguagePage() {
+  document.querySelectorAll(".language-list").forEach(list => {
+    list.classList.toggle("active-language-list", list.id === `${shownLanguage}-list` && shownPanel === "list");
+  });
+  document.querySelectorAll(".language-archive").forEach(archive => {
+    archive.classList.toggle("active-language-archive", archive.id === `${shownLanguage}-archive` && shownPanel === "archive");
+  });
+
+  document.getElementById("languageTools").hidden = shownPanel !== "list";
+  updateLanguageNumbers();
+  updateLanguageList();
+}
+
+function updateLanguageList() {
+  const search = document.getElementById("languageSearch").value.trim().toLowerCase();
+  const list = document.querySelector(".language-list.active-language-list");
+  if (!list) return;
+
+  list.querySelectorAll(".username-card").forEach(card => {
+    const name = card.querySelector("h3")?.textContent.toLowerCase() || "";
+    const status = card.dataset.status || "";
+    card.hidden = !(name.includes(search) && (languageFilter === "all" || status === languageFilter));
+  });
+
+  list.querySelectorAll(".letter-section").forEach(section => {
+    section.hidden = !Array.from(section.querySelectorAll(".username-card")).some(card => !card.hidden);
+  });
+}
+
+window.addEventListener("DOMContentLoaded", refreshLanguagePage);
+</script>
+
+
+<div class="username-modal" id="languageUsernameModal">
+  <div class="username-modal-content">
+    <button class="close-modal" id="closeLanguageModalBtn">&times;</button>
+
+    <h2 id="languageModalUsername">Username</h2>
+
+    <div class="modal-info">
+      <p><strong>Source:</strong> <span id="languageModalSource">Unknown</span></p>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact Us | Deleted Usernames</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header class="navbar">
+  <a href="index.html" class="logo">
+    <img src="images/SSOicon.png" alt="Logo Icon" class="logo-icon-img">
+    <span>Deleted<br>Usernames</span>
+  </a>
+
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="list.html">List</a>
+    <a href="usernames.html">Archive</a>
+    <a href="special-usernames.html">Special Usernames</a>
+    <a href="languages.html">Other Languages</a>
+    <a href="thanks.html">Special Thanks</a>
+  </nav>
+
+  <a class="contact-btn active" href="contact.html">Contact Us</a>
+</header>
+
+<main class="contact-page">
+
+  <section class="contact-hero fade-in">
+    <h1>Contact<br><span>Us</span></h1>
+    <p>
+      Found a deleted username, noticed a mistake, or want to submit any info?
+      Send us a message and we’ll take a look.
+    </p>
+  </section>
+
+  <section class="contact-layout fade-in">
+
+    <form class="contact-form" action="https://formspree.io/f/xeedzvrd" method="POST" enctype="multipart/form-data">
+
+      <div class="form-row">
+        <label for="email">Email address <span>*</span></label>
+        <input type="email" id="email" name="email" placeholder="Your email address" required>
+      </div>
+
+      <div class="form-row">
+        <label for="username">Character name / Username</label>
+        <input type="text" id="username" name="username" placeholder="Name">
+      </div>
+
+      <div class="form-row">
+        <label for="category">What is this about? <span>*</span></label>
+        <select id="category" name="category" required>
+          <option value="">Choose an option</option>
+          <option value="Found username">Found username</option>
+          <option value="Correction">Correction</option>
+          <option value="Special username info">Special username info</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+
+      <div class="form-row">
+        <label for="subject">Subject <span>*</span></label>
+        <input type="text" id="subject" name="subject" placeholder="Subject" required>
+      </div>
+
+      <div class="form-row">
+        <label for="message">Message <span>*</span></label>
+        <textarea id="message" name="message" placeholder="Write your message here..." required></textarea>
+      </div>
+
+      <div class="form-row">
+        <label for="attachment">Attachment</label>
+        <label class="upload-box" for="attachment">
+          <span class="upload-icon">⇧</span>
+          <strong>Click or drag screenshots here</strong>
+          <small>PNG, JPG or WEBP recommended</small>
+        </label>
+        <input class="file-input" type="file" id="attachment" name="attachment" accept="image/png,image/jpeg,image/webp" multiple>
+      </div>
+
+      <input type="hidden" name="_subject" value="New message from Deleted Usernames website">
+
+      <button class="submit-btn" type="submit">Send Message</button>
+</form>
+
+    <aside class="contact-info">
+      <h2>Before sending</h2>
+
+      <div class="info-card">
+        <h3>Username submissions</h3>
+        <p>Please include the exact username, its language/category, and whether it is found or not found.</p>
+      </div>
+
+      <div class="info-card">
+        <h3>Screenshots</h3>
+        <p>For archive screenshots, try to send clear images where the name is readable.</p>
+      </div>
+
+      <div class="info-card">
+        <h3>Corrections</h3>
+        <p>If something is wrong, tell us what needs to be changed and where it appears.</p>
+      </div>
+    </aside>
+
+  </section>
+
+</main>
+
+<footer>
+  <p>© 2026 Deleted Usernames | Fan-made, not affiliated with StarStableEntertainment AB.</p>
+  <p>No responsibility is taken for the accuracy or reliability of the information.</p>
+</footer>
+
+</body>
+</html>

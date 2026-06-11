@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deleted Usernames List</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="navbar">
+  <a href="index.html" class="logo">
+    <img src="images/SSOicon.png" alt="Logo Icon" class="logo-icon-img">
+    <span>Deleted<br>Usernames</span>
+  </a>
+
+  <nav>
+    <a href="index.html">Home</a>
+    <a class="active" href="list.html">List</a>
+    <a href="usernames.html">Archive&nbsp;</a>
+    <a href="special-usernames.html">Special Usernames</a>
+    <a href="languages.html">Other Languages</a>
+    <a href="thanks.html">Special Thanks</a>
+  </nav>
+
+  <a class="contact-btn" href="contact.html">Contact Us</a>
+</header>
+
+<section class="list-page">
+<div class="list-hero">
+<h1>Deleted<br><span>names List</span></h1>
+</div>
+
+<section class="language-tabs fade-in">
+
+  <button class="lang-tab active" onclick="showList('original', this)">
+    Original List
+  </button>
+
+  <button class="lang-tab" onclick="showList('turkish', this)">
+    Turkish Names
+  </button>
+
+  <button class="lang-tab" onclick="showList('spanish', this)">
+    Spanish Names
+  </button>
+
+</section>
+
+<section class="list-tools">
+<input type="text" id="searchInput" placeholder="Search a username..." onkeyup="updateList()">
+
+<div class="list-mini-stats">
+  <div class="mini-stat">
+    <strong id="total-count">221</strong>
+    <span>Total</span>
+  </div>
+
+  <div class="mini-stat">
+    <strong id="found-count">140</strong>
+    <span>Found</span>
+  </div>
+</div>
+
+<div class="filter-buttons">
+<button class="filter-btn active" onclick="setFilter('all', this)">All</button>
+<button class="filter-btn" onclick="setFilter('found', this)">Found</button>
+<button class="filter-btn" onclick="setFilter('not-found', this)">Not Found</button>
+</div>
+</section>
+
+<section class="alphabet-nav">
+<a href="#letter-a">A</a><a href="#letter-b">B</a><a href="#letter-c">C</a><a href="#letter-d">D</a><a href="#letter-e">E</a><a href="#letter-f">F</a><a href="#letter-g">G</a><a href="#letter-h">H</a><a href="#letter-i">I</a><a href="#letter-j">J</a><a href="#letter-k">K</a><a href="#letter-l">L</a><a href="#letter-m">M</a><a href="#letter-n">N</a><a href="#letter-o">O</a><a href="#letter-p">P</a><a href="#letter-r">R</a><a href="#letter-s">S</a><a href="#letter-t">T</a><a href="#letter-u">U</a><a href="#letter-v">V</a><a href="#letter-x">X</a>
+</section>
+
+
+<section class="alphabet-list active-list" id="original-list"></section>
+<section class="alphabet-list" id="turkish-list"></section>
+<section class="alphabet-list" id="spanish-list">
+  <div class="coming-soon-text">Coming soon... Come back later!</div>
+</section>
+
+<p class="no-results" id="noResults">No usernames found.</p>
+</section>
+
+<script src="data.js"></script>
+<script>
+let activeFilter = "all";
+let mainRows = [];
+let currentKey = "original";
+
+function setElementVisible(element, visible) {
+  element.hidden = !visible;
+  element.style.display = visible ? "" : "none";
+}
+
+function getActiveList() {
+  return document.querySelector(".alphabet-list.active-list");
+}
+
+function currentListKey() {
+  return currentKey;
+}
+
+function rowsForCategory(key) {
+  return mainRows.filter(row => row.category === key);
+}
+
+function putCounts(key) {
+  const rows = rowsForCategory(key);
+  const total = rows.length;
+  const found = rows.filter(row => row.status === "found").length;
+
+  document.getElementById("total-count").textContent = total;
+  document.getElementById("found-count").textContent = found;
+}
+
+function updateAlphabetNav() {
+  const nav = document.querySelector(".alphabet-nav");
+  const list = getActiveList();
+  const key = currentListKey();
+
+  if (!nav || !list) return;
+
+  const groups = Array.from(list.querySelectorAll(".letter-section"));
+
+  if (!groups.length || key === "spanish") {
+    nav.hidden = true;
+    nav.style.display = "none";
+    return;
+  }
+
+  nav.hidden = false;
+  nav.style.display = "";
+  nav.replaceChildren();
+
+  groups.forEach(group => {
+    const hasVisibleCard = Array.from(group.querySelectorAll(".username-card"))
+      .some(card => !card.hidden && card.style.display !== "none");
+
+    if (!hasVisibleCard) return;
+
+    const title = group.dataset.letter || group.querySelector("h2")?.textContent.trim();
+    if (!title) return;
+
+    const item = document.createElement("a");
+    item.href = `#${group.id}`;
+    item.textContent = title;
+
+    item.addEventListener("click", event => {
+      event.preventDefault();
+      group.scrollIntoView({ behavior: "smooth", block: "start" });
+      history.replaceState(null, "", `#${group.id}`);
+    });
+
+    nav.append(item);
+  });
+}
+
+function updateList() {
+  const search = normalizeText(document.getElementById("searchInput")?.value || "");
+  const list = getActiveList();
+  if (!list) return;
+
+  list.querySelectorAll(".username-card").forEach(card => {
+    const name = normalizeText(card.querySelector("h3")?.textContent || "");
+    const status = (card.dataset.status || "").trim().toLowerCase();
+    const matchesSearch = !search || name.includes(search);
+    const matchesFilter = activeFilter === "all" || status === activeFilter;
+
+    setElementVisible(card, matchesSearch && matchesFilter);
+  });
+
+  list.querySelectorAll(".letter-section").forEach(group => {
+    const hasVisibleCard = Array.from(group.querySelectorAll(".username-card"))
+      .some(card => !card.hidden && card.style.display !== "none");
+
+    setElementVisible(group, hasVisibleCard);
+  });
+
+  const noResults = document.getElementById("noResults");
+  if (noResults) {
+    const hasVisible = Array.from(list.querySelectorAll(".username-card"))
+      .some(card => !card.hidden && card.style.display !== "none");
+
+    noResults.style.display = hasVisible || currentKey === "spanish" ? "none" : "block";
+  }
+
+  putCounts(currentListKey());
+  updateAlphabetNav();
+}
+
+function setFilter(status, button) {
+  activeFilter = status;
+
+  document.querySelectorAll(".filter-btn").forEach(btn => {
+    btn.classList.toggle("active", btn === button);
+  });
+
+  updateList();
+}
+
+function showList(key, button) {
+  currentKey = key;
+
+  document.querySelectorAll(".alphabet-list").forEach(list => {
+    const isActive = list.id === `${key}-list`;
+    list.classList.toggle("active-list", isActive);
+    list.hidden = !isActive;
+    list.style.display = isActive ? "" : "none";
+  });
+
+  document.querySelectorAll(".language-tabs .lang-tab").forEach(tab => {
+    tab.classList.toggle("active", tab === button);
+  });
+
+  const search = document.getElementById("searchInput");
+  if (search) search.value = "";
+
+  activeFilter = "all";
+
+  document.querySelectorAll(".filter-btn").forEach((btn, index) => {
+    btn.classList.toggle("active", index === 0);
+  });
+
+  const tools = document.querySelector(".list-tools");
+  if (tools) {
+    tools.hidden = key === "spanish";
+    tools.style.display = key === "spanish" ? "none" : "";
+  }
+
+  putCounts(key);
+  updateList();
+}
+
+function bindSourceCards() {
+  document.querySelectorAll(".username-card").forEach(card => {
+    card.addEventListener("click", () => openSourceCard(card));
+  });
+}
+
+async function initListPage() {
+  const original = document.getElementById("original-list");
+  const turkish = document.getElementById("turkish-list");
+
+  setLoading(original);
+  setLoading(turkish);
+
+  try {
+    mainRows = prepareMainRows(await loadSheet(SHEET_NAMES.main));
+
+    renderGroupedList(original, rowsForCategory("original"), "letter");
+    renderGroupedList(turkish, rowsForCategory("turkish"), "turkish-letter");
+
+    bindSourceCards();
+
+    const searchInput = document.getElementById("searchInput");
+    if (searchInput) {
+      searchInput.addEventListener("input", updateList);
+      searchInput.addEventListener("search", updateList);
+    }
+
+    showList("original", document.querySelector(".language-tabs .lang-tab.active"));
+  } catch (error) {
+    console.error(error);
+    setError(original);
+    setError(turkish);
+  }
+}
+
+window.addEventListener("DOMContentLoaded", initListPage);
+</script>
+
+<div class="username-modal" id="usernameModal">
+  <div class="username-modal-content">
+    <button class="close-modal" id="closeModalBtn">&times;</button>
+
+    <h2 id="modalUsername">Username</h2>
+
+    <div class="modal-info">
+      <p><strong>Source:</strong> <span id="modalSource">Unknown</span></p>
+    </div>
+  </div>
+</div>
+
+<script>
+const nameModal = document.getElementById("usernameModal");
+const nameTitle = document.getElementById("modalUsername");
+const sourceText = document.getElementById("modalSource");
+const closeNameModal = document.getElementById("closeModalBtn");
+
+function openSourceCard(card) {
+  nameTitle.textContent = card.querySelector("h3")?.textContent || "Username";
+  sourceText.innerHTML = card.dataset.source || "Unknown";
+  nameModal.classList.add("active");
+  document.body.style.overflow = "hidden";
+}
+
+function hideSourceCard() {
+  nameModal.classList.remove("active");
+  document.body.style.overflow = "";
+}
+
+closeNameModal.addEventListener("click", hideSourceCard);
+nameModal.addEventListener("click", event => {
+  if (event.target === nameModal) hideSourceCard();
+});
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape") hideSourceCard();
+});
+</script>
+<footer>
+  <p>© 2026 Deleted Usernames | Fan-made, not affiliated with StarStableEntertainment AB.</p>
+  <p>No responsibility is taken for the accuracy or reliability of the information.</p>
+</footer>
+
+<div class="username-modal" id="usernameModal">
+  <div class="username-modal-content">
+    <button class="close-modal" id="closeModalBtn">&times;</button>
+
+    <h2 id="modalUsername">Username</h2>
+
+    <div class="modal-info">
+      <p><strong>Source:</strong> <span id="modalSource">Unknown</span></p>
+    </div>
+  </div>
+</div>
+
+<script>
+const nameModal = document.getElementById("usernameModal");
+const nameTitle = document.getElementById("modalUsername");
+const sourceText = document.getElementById("modalSource");
+const closeNameModal = document.getElementById("closeModalBtn");
+
+function openSourceCard(card) {
+  nameTitle.textContent = card.querySelector("h3")?.textContent || "Username";
+  sourceText.innerHTML = card.dataset.source || "Unknown";
+  nameModal.classList.add("active");
+  document.body.style.overflow = "hidden";
+}
+
+function hideSourceCard() {
+  nameModal.classList.remove("active");
+  document.body.style.overflow = "";
+}
+
+document.querySelectorAll(".username-card").forEach(card => {
+  card.addEventListener("click", () => openSourceCard(card));
+});
+
+closeNameModal.addEventListener("click", hideSourceCard);
+nameModal.addEventListener("click", event => {
+  if (event.target === nameModal) hideSourceCard();
+});
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape") hideSourceCard();
+});
+</script>
+
+</body>
+</html>
