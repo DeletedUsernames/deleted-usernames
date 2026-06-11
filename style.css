@@ -2792,3 +2792,32 @@ nav *,
     background-size: auto 105vh !important;
   }
 }
+
+
+/* MOBILE POPUP FIX */
+@media (max-width: 700px) {
+  .username-modal,
+  #usernameModal,
+  #languageUsernameModal {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 99999 !important;
+  }
+
+  .username-modal.active,
+  #usernameModal.active,
+  #languageUsernameModal.active {
+    display: flex !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
+
+  .username-modal-content {
+    position: relative !important;
+    z-index: 100000 !important;
+  }
+
+  .close-modal {
+    z-index: 100001 !important;
+  }
+}
