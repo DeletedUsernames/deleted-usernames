@@ -2727,3 +2727,22 @@ nav *,
     width: min(72vw, 300px) !important;
   }
 }
+
+
+/* MOBILE BACKGROUND FIX */
+@media (max-width: 700px) {
+  html,
+  body {
+    background-image: url('images/bg-mobile.png') !important;
+    background-size: 100% auto !important;
+    background-position: top center !important;
+    background-repeat: repeat-y !important;
+    background-attachment: scroll !important;
+    background-color: #4b1b82 !important;
+  }
+
+  body::before,
+  body::after {
+    background-image: none !important;
+  }
+}
