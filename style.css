@@ -2733,28 +2733,32 @@ nav *,
 
 
 
-/* MOBILE SAFARI BACKGROUND FIX */
+
+
+/* MOBILE ORIGINAL BACKGROUND CLEAN FIX */
 @media (max-width: 700px) {
-  html {
-    min-height: 100% !important;
-    background: #4b1b82 !important;
+  html,
+  body {
+    background-color: #4b1b82 !important;
   }
 
   body {
-    min-height: 100% !important;
-    background:
-      #4b1b82
-      url("./images/bg-mobile.png")
-      top center / 100% auto
-      repeat-y
-      scroll !important;
-    position: relative !important;
-    isolation: isolate !important;
+    background-image: url("images/bg.png") !important;
+    background-repeat: repeat-y !important;
+    background-position: top center !important;
+    background-size: 980px auto !important;
+    background-attachment: scroll !important;
   }
 
   body::before,
   body::after {
     content: none !important;
     display: none !important;
+  }
+}
+
+@media (max-width: 420px) {
+  body {
+    background-size: 860px auto !important;
   }
 }
